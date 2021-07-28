@@ -76,34 +76,46 @@ parquetDir = source + "/wikipedia/pagecounts/staging_parquet_en_only_clean/"
 
 # COMMAND ----------
 
-# TODO
+from pyspark.sql.functions import *
 
 # Replace FILL_IN with your code. You will probably need multiple
 # lines of code for this problem.
 
-washingtons = FILL_IN
+washingtons = (spark  # Our SparkSession & Entry Point
+  .read                     # Our DataFrameReader
+  .parquet(parquetDir)     # Returns an instance of DataFrame
+  .filter(col("project") == 'en')
+  .filter(col("article").endswith("_Washington"))
+  .collect()
+)
 
 totalWashingtons = 0
 
 for washington in washingtons:
-  totalWashingtons += FILL_IN
+  totalWashingtons += washington['requests']
   
 print("Total Washingtons: {0:,}".format( len(washingtons) ))
 print("Total Washington Requests: {0:,}".format( totalWashingtons ))
 
 # COMMAND ----------
 
-# TODO
+from pyspark.sql.functions import *
 
 # Replace FILL_IN with your code. You will probably need multiple
 # lines of code for this problem.
 
-marthas = FILL_IN
+marthas = (spark  # Our SparkSession & Entry Point
+  .read                     # Our DataFrameReader
+  .parquet(parquetDir)     # Returns an instance of DataFrame
+  .filter(col("project") == 'en')
+  .filter(col("article").startswith("Martha_"))
+  .collect()
+)
 
 totalMarthas = 0
 
 for martha in marthas:
-  totalMarthas += FILL_IN
+  totalMarthas += martha['requests']
 
 print("Total Marthas: {0:,}".format( len(marthas) ))
 print("Total Martha Requests: {0:,}".format( totalMarthas ))
