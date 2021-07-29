@@ -73,11 +73,15 @@ destFile = userhome + "/people.parquet"
 # In case it already exists
 dbutils.fs.rm(destFile, True)
 
+# First, let's see what the file looks like.
+print(dbutils.fs.head(sourceFile))
+
+# COMMAND ----------
+
 sourceDF = (
   spark.read
   .option("inferSchema", "true")
   .csv(sourceFile, sep=':', header=True)
-  .cache()
 )
 
 print("Record Count: {0:,}".format( sourceDF.count() ))
@@ -89,14 +93,22 @@ sourceDF.printSchema()
 # COMMAND ----------
 
 from pyspark.sql.functions import *
-from pyspark.sql.types import *
 
-transfDF = sourceDF.select(
-    trim( initcap( concat_ws(' ', col('firstName'), col('middleName'), col('lastName') ) ) ).alias('fullName'),
-           col('gender'), col('birthDate'), col('salary'), 
-           regexp_replace(col('ssn'), '-', '').alias('ssn')  ).distinct()
+outputDF = (sourceDF
+  .select(col("*"),
+    initcap(col("firstName")).alias("capFirstName"),
+    initcap(col("lastName")).alias("capLastName"),
+    initcap(col("middleName")).alias("capMiddleName"),
+    translate(col("ssn"), "-", "").alias("numSsn")
+  )
+  .dropDuplicates(["capFirstName", "capMiddleName", "capLastName", "numSsn", "gender", "birthDate", "salary"])
+  .drop("capFirstName", "capMiddleName", "capLastName", "numSsn")
+)
 
-transfDF.write.parquet(destFile)
+outputDF.count()
+
+outputDF.write.parquet(destFile)
+
 
 # COMMAND ----------
 
