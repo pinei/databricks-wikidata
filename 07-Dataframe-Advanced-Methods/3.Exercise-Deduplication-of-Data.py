@@ -74,7 +74,10 @@ destFile = userhome + "/people.parquet"
 dbutils.fs.rm(destFile, True)
 
 sourceDF = (
-  spark.read.csv(sourceFile, sep=':', header=True).cache()
+  spark.read
+  .option("inferSchema", "true")
+  .csv(sourceFile, sep=':', header=True)
+  .cache()
 )
 
 print("Record Count: {0:,}".format( sourceDF.count() ))
@@ -85,7 +88,15 @@ sourceDF.printSchema()
 
 # COMMAND ----------
 
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
 
+transfDF = sourceDF.select(
+    trim( initcap( concat_ws(' ', col('firstName'), col('middleName'), col('lastName') ) ) ).alias('fullName'),
+           col('gender'), col('birthDate'), col('salary'), 
+           regexp_replace(col('ssn'), '-', '').alias('ssn')  ).distinct()
+
+transfDF.write.parquet(destFile)
 
 # COMMAND ----------
 
