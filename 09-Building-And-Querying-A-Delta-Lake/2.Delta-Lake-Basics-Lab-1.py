@@ -109,7 +109,10 @@ DeltaPath = userhome + "/delta/customer-data/"
 # TODO
 
 deltaDF = (spark.read
-  FILL_IN
+  .format("delta")
+  .load(DeltaPath)
+)
+ 
 
 # COMMAND ----------
 
@@ -149,10 +152,12 @@ dbutils.fs.rm(CustomerCountsPath, True) #deletes Delta table if previously creat
 
 # COMMAND ----------
 
-# TODO
-
 (customerCounts.write
- FILL-IN)
+ .format("delta")
+ .mode("overwrite")
+ .save(CustomerCountsPath)
+)
+
 
 # COMMAND ----------
 
@@ -220,13 +225,20 @@ inputSchema = StructType([
 
 # COMMAND ----------
 
-# TODO
-
 newDataPath = "/mnt/training/online_retail/outdoor-products/outdoor-products-small.csv"
+print(dbutils.fs.head(newDataPath))
+
+# COMMAND ----------
+
 newDataDF = (spark
  .read
+ .schema(inputSchema)
+ .format("csv")
  .option("header", "true")
- FILL_IN
+ .load(newDataPath)
+)
+
+newDataDF.count()
 
 # COMMAND ----------
 
@@ -235,9 +247,12 @@ newDataDF = (spark
 
 # COMMAND ----------
 
-# TODO
+from pyspark.sql.functions import *
 
-newCustomerCounts = FILL_IN
+newCustomerCounts = (newDataDF
+  .groupBy(col("Country"), col("CustomerID"))
+  .agg(count("*").alias("total_orders"))
+)
 
 # COMMAND ----------
 
@@ -282,7 +297,6 @@ newCustomerCounts.createOrReplaceTempView("new_customer_counts")
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC 
 # MAGIC SELECT SUM(total_orders) FROM customer_counts
 
 # COMMAND ----------
@@ -298,10 +312,11 @@ newCustomerCounts.createOrReplaceTempView("new_customer_counts")
 
 # COMMAND ----------
 
-# TODO
-
 (newDataDF.write
-  FILL-IN)
+  .format("delta")
+  .mode("append")
+  .save(DeltaPath)
+)
 
 # COMMAND ----------
 
