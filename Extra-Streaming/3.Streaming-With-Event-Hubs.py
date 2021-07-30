@@ -48,6 +48,10 @@
 
 # COMMAND ----------
 
+# MAGIC %run ./Includes/User-Name
+
+# COMMAND ----------
+
 # MAGIC %run ./Includes/Streaming-Demo-Setup
 
 # COMMAND ----------
@@ -90,7 +94,7 @@
 # MAGIC 
 # MAGIC import org.apache.spark.eventhubs.{EventHubsConf, EventPosition}
 # MAGIC 
-# MAGIC val connectionString = "Endpoint=sb://<event_hubs_namespace>.servicebus.windows.net/;SharedAccessKeyName=<key_name>;SharedAccessKey=<signing_key>=;EntityPath=<event_hubs_instance>"
+# MAGIC val connectionString = "Endpoint=sb://databricksdemoeventhubs101.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=yctUBf876HKsggOJDvgvzs4VNm/D2yC8fEZ83M6Edhg="
 # MAGIC 
 # MAGIC val ehWriteConf = EventHubsConf(connectionString)
 
@@ -102,20 +106,22 @@
 
 # COMMAND ----------
 
-# MAGIC %scala
-# MAGIC import org.apache.spark.sql.streaming.Trigger.ProcessingTime
-# MAGIC 
-# MAGIC val checkpointPath = userhome + "/event-hub/write-checkpoint"
-# MAGIC dbutils.fs.rm(checkpointPath,true)
-# MAGIC 
-# MAGIC activityStreamDF
-# MAGIC   .writeStream
-# MAGIC   .format("eventhubs")
-# MAGIC   .outputMode("update")
-# MAGIC   .options(ehWriteConf.toMap)
-# MAGIC   .trigger(ProcessingTime("25 seconds"))
-# MAGIC   .option("checkpointLocation", checkpointPath)
-# MAGIC   .start()
+## TODO : migrar o /Includes/Streaming-Demo-Setup para scala
+
+%scala
+import org.apache.spark.sql.streaming.Trigger.ProcessingTime
+
+val checkpointPath = userhome + "/event-hub/write-checkpoint"
+dbutils.fs.rm(checkpointPath,true)
+
+activityStreamDF
+  .writeStream
+  .format("eventhubs")
+  .outputMode("update")
+  .options(ehWriteConf.toMap)
+  .trigger(ProcessingTime("25 seconds"))
+  .option("checkpointLocation", checkpointPath)
+  .start()
 
 # COMMAND ----------
 
