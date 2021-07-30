@@ -114,7 +114,7 @@ CustomerCountsPath = userhome + "/delta/customer_counts/"
 # COMMAND ----------
 
 # TODO
-count = spark.sql("FILL IN").collect()[0][0]
+count = spark.sql("SELECT SUM(total_orders) FROM customer_counts WHERE Country = 'Sweden'").collect()[0][0]
 
 # COMMAND ----------
 
@@ -173,7 +173,7 @@ count = spark.sql("FILL IN").collect()[0][0]
 # COMMAND ----------
 
 # TODO
-%timeit preZorderQuery = spark.sql("FILL_IN").collect()
+%timeit preZorderQuery = spark.sql("SELECT * FROM customer_data_delta WHERE StockCode = 22301").collect()
 
 # COMMAND ----------
 
@@ -185,8 +185,8 @@ count = spark.sql("FILL IN").collect()[0][0]
 
 # MAGIC %sql
 # MAGIC -- TODO
-# MAGIC OPTIMIZE FILL_IN
-# MAGIC ZORDER by (FILL_IN)
+# MAGIC OPTIMIZE customer_data_delta
+# MAGIC ZORDER by (StockCode)
 
 # COMMAND ----------
 
@@ -196,7 +196,7 @@ count = spark.sql("FILL IN").collect()[0][0]
 # COMMAND ----------
 
 # TODO
-%timeit postZorderQuery = spark.sql("FILL_IN").collect()
+%timeit postZorderQuery = spark.sql("SELECT * FROM customer_data_delta WHERE StockCode = 22301").collect()
 
 # COMMAND ----------
 
@@ -263,7 +263,7 @@ count = spark.sql("FILL IN").collect()[0][0]
 # COMMAND ----------
 
 # TODO
-preNumFiles = len(dbutils.fs.ls(FILL_IN))
+preNumFiles = len(dbutils.fs.ls(DeltaPath + "/Country=Sweden"))
 print(preNumFiles)
 
 # COMMAND ----------
@@ -274,8 +274,7 @@ print(preNumFiles)
 # COMMAND ----------
 
 # MAGIC %sql
-# MAGIC -- TODO
-# MAGIC VACUUM FILL_IN
+# MAGIC VACUUM customer_data_delta RETAIN 0 HOURS;
 
 # COMMAND ----------
 
@@ -304,7 +303,7 @@ spark.conf.set("spark.databricks.delta.retentionDurationCheck.enabled", False)
 # COMMAND ----------
 
 # TODO
-postNumFiles = len(dbutils.fs.ls(FILL_IN))
+postNumFiles = len(dbutils.fs.ls(DeltaPath + "/Country=Sweden"))
 print(postNumFiles)
 
 # COMMAND ----------
