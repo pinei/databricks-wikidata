@@ -1,4 +1,5 @@
 # Databricks notebook source
+# MAGIC 
 # MAGIC %python
 # MAGIC # ****************************************************************************
 # MAGIC # Utility method to count & print the number of records in each partition.

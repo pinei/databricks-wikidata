@@ -1,6 +1,5 @@
 # Databricks notebook source
-# MAGIC %md-sandbox
-# MAGIC <img src="https://files.training.databricks.com/images/Apache-Spark-Logo_TM_200px.png" style="float: left: margin: 20px"/>
+# MAGIC %md
 # MAGIC 
 # MAGIC # Working with Time Windows
 # MAGIC 
@@ -225,7 +224,7 @@ display(countsDF)
 # MAGIC 
 # MAGIC It's our `groupBy()`. `groupBy()` causes a _shuffle_, and, by default, Spark SQL shuffles to 200 partitions. In addition, we're doing a _stateful_ aggregation: one that requires Structured Streaming to maintain and aggregate data over time.
 # MAGIC 
-# MAGIC When doing a stateful aggregation, Structured Streaming must maintain an in-memory _state map_ for each window within each partition. For fault tolerance reasons, the state map has to be saved after a partition is processed, and it needs to be saved somewhere fault-tolerant. To meet those requirements, the Streaming API saves the maps to a distributed store. On some clusters, that will be HDFS. Databricks uses the DBFS.
+# MAGIC When doing a stateful aggregation, Structured Streaming must maintain an in-memory _state map_ for each window within each partition. For fault tolerance reasons, the state map has to be saved after a partition is processed, and it needs to be saved somewhere fault-tolerant. To meet those requirements, the Streaming API saves the maps to a distributed store. On some clusters, that will be HDFS. Azure Databricks uses the DBFS.
 # MAGIC 
 # MAGIC That means that every time it finishes processing a window, the Streaming API writes its internal map to disk. The write has some overhead, typically between 1 and 2 seconds.
 
@@ -242,7 +241,7 @@ display(countsDF)
 # MAGIC * Maintenance of an **in-memory state map** for **each window** within **each partition**
 # MAGIC * Writing of the state map to a fault-tolerant store
 # MAGIC   * On some clusters, that will be HDFS
-# MAGIC   * Databricks uses the DBFS
+# MAGIC   * Azure Databricks uses the DBFS
 # MAGIC * Around 1 to 2 seconds overhead
 
 # COMMAND ----------

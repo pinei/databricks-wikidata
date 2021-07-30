@@ -1,4 +1,5 @@
 # Databricks notebook source
+# MAGIC 
 # MAGIC %python
 # MAGIC from pyspark.sql.functions import col
 # MAGIC from pyspark.sql.types import StringType, DoubleType, LongType

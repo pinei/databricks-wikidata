@@ -1,36 +1,4 @@
 # Databricks notebook source
-# MAGIC %md-sandbox
-# MAGIC <img src="https://files.training.databricks.com/images/Apache-Spark-Logo_TM_200px.png" style="float: left: margin: 20px"/>
-# MAGIC 
-# MAGIC # Structured Streaming Concepts
-# MAGIC 
-# MAGIC ## In this lesson you:
-# MAGIC * Stream data from a file and write it out to a distributed file system
-# MAGIC * List active streams
-# MAGIC * Stop active streams
-# MAGIC 
-# MAGIC ## Datasets Used
-# MAGIC Data from
-# MAGIC `/mnt/training/definitive-guide/data/activity-data-stream.json/`
-# MAGIC contains smartphone accelerometer samples from devices and users.
-# MAGIC 
-# MAGIC The file consists of the following columns:
-# MAGIC 
-# MAGIC | Field          | Description |
-# MAGIC | ------------- | ----------- |
-# MAGIC | `Index` | unique identifier of event |
-# MAGIC | `x` | acceleration in x-dir |
-# MAGIC | `y` | acceleration in y-dir |
-# MAGIC | `z` | acceleration in z-dir |
-# MAGIC | `User` | unique user identifier |
-# MAGIC | `Model` | i.e Nexus4 |
-# MAGIC | `Device` | type of Model |
-# MAGIC | `gt` | transportation mode |
-# MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> The last column is named `gt`. This is an initialism for "ground truth". Wikipedia: <a href="https://en.wikipedia.org/wiki/Ground_truth" target="_blank">Ground Truth</a>
-
-# COMMAND ----------
-
 # MAGIC %md
 # MAGIC 
 # MAGIC <h2><img src="https://files.training.databricks.com/images/105/logo_spark_tiny.png"> Getting Started</h2>
@@ -173,12 +141,12 @@ except:
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC Sorting is one of a handful of operations that is either too complex or logically not possible to do with a stream.
 # MAGIC 
 # MAGIC For more information on this topic, see the <a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#unsupported-operations" target="_blank">Structured Streaming Programming Guide / Unsupported Operations</a>.
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> We will see in the following module how we can sort an **aggregated** stream.
+# MAGIC > We will see in the following module how we can sort an **aggregated** stream.
 
 # COMMAND ----------
 
@@ -191,7 +159,7 @@ except:
 # MAGIC There are a number of parameters to the `DataStreamWriter` configuration:
 # MAGIC * Query's name (optional) - This name must be unique among all the currently active queries in the associated SQLContext.
 # MAGIC * Trigger (optional) - Default value is `ProcessingTime(0`) and it will run the query as fast as possible.
-# MAGIC * Checkpointing directory (optional for pup/sub sinks)
+# MAGIC * Checkpointing directory (optional for pub/sub sinks)
 # MAGIC * Output mode
 # MAGIC * Output sink
 # MAGIC * Configuration specific to the output sink, such as:
@@ -359,7 +327,7 @@ streamingQuery.stop()                   # Stop the stream
 
 # COMMAND ----------
 
-# MAGIC %md-sandbox
+# MAGIC %md
 # MAGIC 
 # MAGIC <h2><img src="https://files.training.databricks.com/images/105/logo_spark_tiny.png"> The Display function</h2>
 # MAGIC 
@@ -374,7 +342,7 @@ streamingQuery.stop()                   # Stop the stream
 # MAGIC 
 # MAGIC `display(myDF, streamName = "myQuery")`
 # MAGIC 
-# MAGIC <img alt="Side Note" title="Side Note" style="vertical-align: text-bottom; position: relative; height:1.75em; top:0.05em; transform:rotate(15deg)" src="https://files.training.databricks.com/static/images/icon-note.webp"/> We just programmatically stopped our only streaming query in the previous cell. In the cell below, `display` will automatically start our streaming DataFrame, `streamingDF`.  We are passing `stream_2p` as the name for this newly started stream.
+# MAGIC > We just programmatically stopped our only streaming query in the previous cell. In the cell below, `display` will automatically start our streaming DataFrame, `streamingDF`.  We are passing `stream_2p` as the name for this newly started stream.
 
 # COMMAND ----------
 

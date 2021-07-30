@@ -1,4 +1,5 @@
 # Databricks notebook source
+# MAGIC 
 # MAGIC %run "./Classroom-Setup"
 
 # COMMAND ----------
@@ -93,3 +94,4 @@ newDataDF = (spark
   .format("delta")
   .mode("append")
   .save(DeltaPath))
+

@@ -1,4 +1,5 @@
 # Databricks notebook source
+# MAGIC 
 # MAGIC %run "./Course-Name"
 
 # COMMAND ----------
