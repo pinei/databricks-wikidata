@@ -66,7 +66,9 @@
 # MAGIC 
 # MAGIC val tags = com.databricks.logging.AttributionContext.current.tags
 # MAGIC val username = tags.getOrElse(com.databricks.logging.BaseTagDefinitions.TAG_USER, java.util.UUID.randomUUID.toString.replace("-", ""))
-# MAGIC val path = username+"/runLog"
+# MAGIC val path = userhome+"/runLog"
+# MAGIC 
+# MAGIC print(path)
 # MAGIC 
 # MAGIC spark
 # MAGIC   .range(1)
